@@ -3,7 +3,7 @@
     import { RootState } from '../store/store';
     import ContactItem from './contactItem';
     import ContactForm from './contactForm';
-    import { addContact, editContact } from '../store/contactsSlice';
+    import { addContact, editContact, removeContact } from '../store/contactsSlice';
 
     const ContactList: React.FC = () => {
     const contacts = useSelector((state: RootState) => state.contacts.contacts);
@@ -26,7 +26,7 @@
     };
 
     const handleRemove = (id: number) => {
-        const updatedContacts = contacts.filter(contact => contact.id !== id);
+        dispatch(removeContact(id)); // Dispara a ação para remover o contato
     };
 
     return (
@@ -42,7 +42,7 @@
             key={contact.id}
             contact={contact}
             onEdit={handleEdit}
-            onRemove={handleRemove}
+            onRemove={handleRemove} // Passa a função de remover para o componente ContactItem
             />
         ))}
         </div>
@@ -50,7 +50,3 @@
     };
 
     export default ContactList;
-function removeContact(id: number): any {
-    throw new Error('Function not implemented.');
-}
-

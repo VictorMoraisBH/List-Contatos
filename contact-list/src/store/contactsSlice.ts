@@ -1,3 +1,5 @@
+// store/contactsSlice.ts
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Contact {
@@ -15,18 +17,14 @@ const initialState: ContactsState = {
   contacts: [],
 };
 
-const contactSlice = createSlice({
+const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    addContact(state, action: PayloadAction<{ name: string; email: string; phone: string }>) {
-      const newContact = {
-        id: state.contacts.length + 1,
-        ...action.payload,
-      };
-      state.contacts.push(newContact);
+    addContact: (state, action: PayloadAction<Contact>) => {
+      state.contacts.push(action.payload);
     },
-    editContact(state, action: PayloadAction<Contact>) {
+    editContact: (state, action: PayloadAction<Contact>) => {
       const index = state.contacts.findIndex(contact => contact.id === action.payload.id);
       if (index !== -1) {
         state.contacts[index] = action.payload;
@@ -38,5 +36,5 @@ const contactSlice = createSlice({
   },
 });
 
-export const { addContact, editContact, removeContact } = contactSlice.actions;
-export default contactSlice.reducer;
+export const { addContact, editContact, removeContact } = contactsSlice.actions;
+export default contactsSlice.reducer;

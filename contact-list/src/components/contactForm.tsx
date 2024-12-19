@@ -48,8 +48,12 @@
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (name && email && phone) {
         onSave({ name, email, phone });
-        resetCurrentContact(); // Resetar após salvar
+        resetCurrentContact();
+        } else {
+        // Add form validation or error handling here if necessary
+        }
     };
 
     return (
