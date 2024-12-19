@@ -1,22 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { addContact, editContact } from '../store/contactsSlice';
-import styled from 'styled-components';
+    import React, { useState, useEffect } from 'react';
+    import styled from 'styled-components';
 
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    const FormContainer = styled.div`
+    padding: 20px;
+    border: 1px solid #ddd;
     margin-bottom: 20px;
+    border-radius: 5px;
+    `;
+
+    const Input = styled.input`
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    `;
+
+    const Button = styled.button`
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background-color: #45a049;
+    }
     `;
 
     interface ContactFormProps {
-        currentContact: { id: number; name: string; email: string; phone: string } | null;
-        resetCurrentContact: () => void;
+    currentContact: { id: number; name: string; email: string; phone: string } | null;
+    onSave: (contact: { name: string; email: string; phone: string }) => void;
+    resetCurrentContact: () => void;
     }
 
-const ContactForm: React.FC<ContactFormProps> = ({ currentContact, resetCurrentContact }) => {
-    const dispatch = useDispatch();
+    const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -31,25 +48,36 @@ const ContactForm: React.FC<ContactFormProps> = ({ currentContact, resetCurrentC
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (currentContact) {
-        dispatch(editContact({ id: currentContact.id, name, email, phone }));
-        resetCurrentContact();
-        } else {
-        dispatch(addContact({ name, email, phone }));
-        }
-        setName('');
-        setEmail('');
-        setPhone('');
+        onSave({ name, email, phone });
+        resetCurrentContact(); // Resetar após salvar
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-        <input placeholder="Nome completo" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input placeholder="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-        <button type="submit">{currentContact ? 'Editar Contato' : 'Adicionar Contato'}</button>
-        </Form>
+        <FormContainer>
+        <h2>{currentContact ? 'Editar Contato' : 'Adicionar Novo Contato'}</h2>
+        <form onSubmit={handleSubmit}>
+            <Input 
+            type="text" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            placeholder="Nome" 
+            />
+            <Input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            placeholder="Email" 
+            />
+            <Input 
+            type="text" 
+            value={phone} 
+            onChange={(e) => setPhone(e.target.value)} 
+            placeholder="Telefone" 
+            />
+            <Button type="submit">{currentContact ? 'Salvar Alterações' : 'Adicionar Contato'}</Button>
+        </form>
+        </FormContainer>
     );
-    };  
+    };
 
-export default ContactForm;
+    export default ContactForm;

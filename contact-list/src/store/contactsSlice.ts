@@ -11,25 +11,32 @@ interface ContactsState {
   contacts: Contact[];
 }
 
-const initialState: ContactsState = { contacts: [] };
+const initialState: ContactsState = {
+  contacts: [],
+};
 
-export const contactsSlice = createSlice({
+const contactSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    addContact: (state, action: PayloadAction<Omit<Contact, 'id'>>) => {
-      const newContact = { id: Date.now(), ...action.payload };
+    addContact(state, action: PayloadAction<{ name: string; email: string; phone: string }>) {
+      const newContact = {
+        id: state.contacts.length + 1,
+        ...action.payload,
+      };
       state.contacts.push(newContact);
+    },
+    editContact(state, action: PayloadAction<Contact>) {
+      const index = state.contacts.findIndex(contact => contact.id === action.payload.id);
+      if (index !== -1) {
+        state.contacts[index] = action.payload;
+      }
     },
     removeContact: (state, action: PayloadAction<number>) => {
       state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
     },
-    editContact: (state, action: PayloadAction<Contact>) => {
-      const index = state.contacts.findIndex(contact => contact.id === action.payload.id);
-      if (index !== -1) state.contacts[index] = action.payload;
-    },
   },
 });
 
-export const { addContact, removeContact, editContact } = contactsSlice.actions;
-export default contactsSlice.reducer;
+export const { addContact, editContact, removeContact } = contactSlice.actions;
+export default contactSlice.reducer;
