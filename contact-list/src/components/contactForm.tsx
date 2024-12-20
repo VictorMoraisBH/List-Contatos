@@ -1,5 +1,6 @@
     import React, { useState, useEffect } from 'react';
     import styled from 'styled-components';
+    import InputMask from 'react-input-mask';
 
     const FormContainer = styled.div`
     padding: 20px;
@@ -31,9 +32,10 @@
     currentContact: { id: number; name: string; email: string; phone: string } | null;
     onSave: (contact: { name: string; email: string; phone: string }) => void;
     resetCurrentContact: () => void;
+    existingContacts: { email: string; phone: string }[]; // Para checar os contatos existentes
     }
 
-    const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact }) => {
+    const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact, existingContacts }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -48,12 +50,23 @@
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (name && email && phone) {
-        onSave({ name, email, phone });
-        resetCurrentContact();
-        } else {
-        // Add form validation or error handling here if necessary
+
+        // Verificar se o email ou telefone já existem
+        const isEmailExist = existingContacts.some(contact => contact.email === email);
+        const isPhoneExist = existingContacts.some(contact => contact.phone === phone);
+
+        if (isEmailExist) {
+        alert('Este e-mail já está cadastrado.');
+        return;
         }
+
+        if (isPhoneExist) {
+        alert('Este telefone já está cadastrado.');
+        return;
+        }
+
+        onSave({ name, email, phone });
+        resetCurrentContact(); // Resetar após salvar
     };
 
     return (
@@ -72,12 +85,18 @@
             onChange={(e) => setEmail(e.target.value)} 
             placeholder="Email" 
             />
-            <Input 
-            type="text" 
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
-            placeholder="Telefone" 
-            />
+            <InputMask
+            mask="(99) 9 9999-9999"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            >
+            {(inputProps: any) => (
+                <Input 
+                {...inputProps}
+                placeholder="Telefone" 
+                />
+            )}
+            </InputMask>
             <Button type="submit">{currentContact ? 'Salvar Alterações' : 'Adicionar Contato'}</Button>
         </form>
         </FormContainer>
