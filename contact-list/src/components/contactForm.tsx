@@ -7,6 +7,8 @@
     border: 1px solid #ddd;
     margin-bottom: 20px;
     border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     `;
 
     const Input = styled.input`
@@ -30,9 +32,9 @@
 
     interface ContactFormProps {
     currentContact: { id: number; name: string; email: string; phone: string } | null;
-    onSave: (contact: { name: string; email: string; phone: string }) => void;
+    onSave: (contact: { id?: number; name: string; email: string; phone: string }) => void;
     resetCurrentContact: () => void;
-    existingContacts: { email: string; phone: string }[];
+    existingContacts: { id: number; email: string; phone: string }[];
     }
 
     const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact, existingContacts }) => {
@@ -45,14 +47,18 @@
         setName(currentContact.name);
         setEmail(currentContact.email);
         setPhone(currentContact.phone);
+        } else {
+        setName('');
+        setEmail('');
+        setPhone('');
         }
-    }, [currentContact]);
+    }, [currentContact, existingContacts]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const isEmailExist = existingContacts.some(contact => contact.email === email);
-        const isPhoneExist = existingContacts.some(contact => contact.phone === phone);
+        const isEmailExist = existingContacts.some(contact => contact.email === email && contact.id !== currentContact?.id);
+        const isPhoneExist = existingContacts.some(contact => contact.phone === phone && contact.id !== currentContact?.id);
 
         if (isEmailExist) {
         alert('Este e-mail já está cadastrado.');
@@ -64,7 +70,7 @@
         return;
         }
 
-        onSave({ name, email, phone });
+        onSave({ id: currentContact?.id, name, email, phone });
         resetCurrentContact();
     };
 

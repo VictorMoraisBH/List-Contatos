@@ -1,59 +1,83 @@
-        import React, { useState } from 'react';
-        import { useSelector, useDispatch } from 'react-redux';
-        import { RootState } from '../store/store';
-        import ContactItem from './contactItem';
-        import ContactForm from './contactForm';
-        import { addContact, editContact, removeContact } from '../store/contactsSlice';
+    import React from 'react';
+    import styled from 'styled-components';
 
-        const ContactList: React.FC = () => {
-            const contacts = useSelector((state: RootState) => state.contacts.contacts);
-            const [currentContact, setCurrentContact] = useState<null | typeof contacts[0]>(null);
-            const dispatch = useDispatch();
-        
-            const handleSave = (contact: { name: string; email: string; phone: string }) => {
-            if (currentContact) {
-                dispatch(editContact({ ...currentContact, ...contact }));
-                setCurrentContact(null); // Limpa o contato após salvar
-            } else {
-                const newContact = {
-                ...contact,
-                id: Date.now()
-                };
-                dispatch(addContact(newContact));
-            }
-            };
-        
-            const handleEdit = (contact: typeof contacts[0]) => {
-            setCurrentContact(contact); // Define o contato que será editado
-            };
-        
-            const handleRemove = (id: number) => {
-            dispatch(removeContact(id)); // Dispara a ação para remover o contato
-            };
-        
-            return (
-            <div>
-                <h1>Lista de Contatos</h1>
-                <ContactForm
-                currentContact={currentContact}
-                resetCurrentContact={() => setCurrentContact(null)}
-                onSave={handleSave}
-                existingContacts={contacts.map(contact => ({
-                    email: contact.email,
-                    phone: contact.phone
-                }))} // Passa os contatos existentes
-                />
-                {contacts.map((contact) => (
-                <ContactItem
-                    key={contact.id}
-                    contact={contact}
-                    onEdit={handleEdit}
-                    onRemove={handleRemove}
-                />
-                ))}
-            </div>
-            );
-        };
-        
+    const Container = styled.div`
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    `;
 
-        export default ContactList;
+    const ContactItem = styled.li`
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    list-style-type: none;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    `;
+
+    const EditButton = styled.button`
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    &:hover {
+        background-color: #45a049;
+    }
+    `;
+
+    const DeleteButton = styled.button`
+    margin-left: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    &:hover {
+        background-color: #d32f2f;
+    }
+    `;
+
+    const ContactInfo = styled.div`
+    flex-grow: 1;
+    margin-left: 10px;
+    `;
+
+    interface ContactListProps {
+    contacts: { id: number; name: string; email: string; phone: string }[];
+    setCurrentContact: (contact: { id: number; name: string; email: string; phone: string } | null) => void;
+    removeContact: (id: number) => void;
+    }
+
+    const ContactList: React.FC<ContactListProps> = ({ contacts, setCurrentContact, removeContact }) => {
+    return (
+        <Container>
+        <h2>Lista de Contatos</h2>
+        <ul>
+            {contacts.map(contact => (
+            <ContactItem key={contact.id}>
+                <ContactInfo>
+                <strong>{contact.name}</strong><br />
+                {contact.email}<br />
+                {contact.phone}
+                </ContactInfo>
+                <EditButton onClick={() => setCurrentContact(contact)}>Editar</EditButton>
+                <DeleteButton onClick={() => removeContact(contact.id)}>Deletar</DeleteButton>
+            </ContactItem>
+            ))}
+        </ul>
+        </Container>
+    );
+    };
+
+    export default ContactList;
