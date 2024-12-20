@@ -36,9 +36,9 @@
     }
 
     const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact, existingContacts }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [name, setName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
 
     useEffect(() => {
         if (currentContact) {
@@ -48,7 +48,7 @@
         }
     }, [currentContact]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Verificar se o email ou telefone já existem
@@ -88,9 +88,9 @@
             <InputMask
             mask="(99) 9 9999-9999"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
             >
-            {(inputProps: any) => (
+            {(inputProps: React.InputHTMLAttributes<HTMLInputElement>) => (
                 <Input 
                 {...inputProps}
                 placeholder="Telefone" 

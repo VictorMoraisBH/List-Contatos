@@ -1,19 +1,11 @@
 import React from 'react';
 import ContactList from './components/contactList';
-import styled from 'styled-components';
-import { ToastContainer } from 'react-toastify'; // Importar o ToastContainer
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #f4f7fb;
-`;
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
   return (
-    <AppContainer>
+    <div>
       <ContactList />
       <ToastContainer
         position="top-right"
@@ -25,9 +17,9 @@ const App: React.FC = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        aria-label="Toast notifications" 
+        aria-label="Toast notifications"
       />
-    </AppContainer>
+    </div>
   );
 };
 
