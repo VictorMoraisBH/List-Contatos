@@ -6,10 +6,12 @@
     "@reduxjs/toolkit": "^2.5.0",
     "@types/styled-components": "^5.1.34",
     "cra-template-typescript": "1.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-input-mask": "^2.0.4",
     "react-redux": "^9.2.0",
     "react-scripts": "^5.0.1",
+    "react-toastify": "^11.0.2",
     "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
@@ -41,9 +43,13 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/jest": "^29.5.14",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.10",
+    "@types/react-input-mask": "^3.0.6",
+    "@types/react-toastify": "^4.0.2",
     "@types/testing-library__react": "^10.0.1",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
     "typescript": "^4.9.5"
   }
 }
