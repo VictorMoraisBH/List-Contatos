@@ -32,7 +32,7 @@
     currentContact: { id: number; name: string; email: string; phone: string } | null;
     onSave: (contact: { name: string; email: string; phone: string }) => void;
     resetCurrentContact: () => void;
-    existingContacts: { email: string; phone: string }[]; // Para checar os contatos existentes
+    existingContacts: { email: string; phone: string }[];
     }
 
     const ContactForm: React.FC<ContactFormProps> = ({ currentContact, onSave, resetCurrentContact, existingContacts }) => {
@@ -51,7 +51,6 @@
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Verificar se o email ou telefone já existem
         const isEmailExist = existingContacts.some(contact => contact.email === email);
         const isPhoneExist = existingContacts.some(contact => contact.phone === phone);
 
@@ -66,7 +65,7 @@
         }
 
         onSave({ name, email, phone });
-        resetCurrentContact(); // Resetar após salvar
+        resetCurrentContact();
     };
 
     return (
